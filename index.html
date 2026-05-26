@@ -21,6 +21,9 @@
     min-height: 100vh;
   }
 
+  /* The stage is sized to the natural aspect ratio of the device image.
+     Both the image and the overlay are children of .stage so they scale
+     together as a single unit. */
   .stage {
     position: relative;
     width: min(96vw, 1672px);
@@ -33,9 +36,10 @@
     inset: 0;
     width: 100%;
     height: 100%;
-    background-image: url('countdown_device.png');
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
+    object-fit: fill;
+    display: block;
+    /* Radial mask: opaque centre, fades to transparent at edges
+       so the device frame blends into pure black. */
     -webkit-mask-image: radial-gradient(
       ellipse 58% 72% at center,
       rgba(0,0,0,1) 0%,
@@ -54,32 +58,22 @@
     );
   }
 
-  /* Display panel sized and placed against the 1672x941 source image. */
-  .display {
-    position: absolute;
-    left: 25%;
-    top: 37.088%;
-    width: 48.325%;
-    height: 15.728%;
-  }
-
-  /* Each digit is absolutely positioned within the display container.
-     Width 9.6535% of container, full height. */
+  /* Each digit is absolutely positioned over its embossed counterpart.
+     Coordinates measured directly against the 1672x941 source image. */
   .digit-wrap {
     position: absolute;
-    width: 9.6535%;
-    height: 100%;
-    top: 0;
+    top: 40.914%;
+    height: 12.752%;
   }
 
-  .digit-wrap[data-position="d0"] { left:  0.000%; }
-  .digit-wrap[data-position="d1"] { left: 11.139%; }
-  .digit-wrap[data-position="h0"] { left: 25.990%; }
-  .digit-wrap[data-position="h1"] { left: 37.129%; }
-  .digit-wrap[data-position="m0"] { left: 52.599%; }
-  .digit-wrap[data-position="m1"] { left: 63.738%; }
-  .digit-wrap[data-position="s0"] { left: 79.208%; }
-  .digit-wrap[data-position="s1"] { left: 90.347%; }
+  .digit-wrap[data-position="d0"] { left: 25.239%; width: 4.486%; }
+  .digit-wrap[data-position="d1"] { left: 31.758%; width: 4.426%; }
+  .digit-wrap[data-position="h0"] { left: 39.115%; width: 4.486%; }
+  .digit-wrap[data-position="h1"] { left: 45.335%; width: 4.486%; }
+  .digit-wrap[data-position="m0"] { left: 52.990%; width: 4.486%; }
+  .digit-wrap[data-position="m1"] { left: 59.211%; width: 4.426%; }
+  .digit-wrap[data-position="s0"] { left: 66.627%; width: 4.426%; }
+  .digit-wrap[data-position="s1"] { left: 72.907%; width: 4.426%; }
 
   .digit {
     width: 100%;
@@ -87,24 +81,24 @@
     display: block;
   }
 
-  /* Colons: positioned between groups */
+  /* Colons sit between groups, centred vertically with the digits */
   .colon {
     position: absolute;
-    top: 22%;
-    bottom: 22%;
-    width: 2%;
+    top: 43.5%;
+    height: 7.5%;
+    width: 1.2%;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     align-items: center;
-    justify-content: space-around;
   }
 
-  .colon[data-pos="c1"] { left: 21.3%; }  /* between days and hours */
-  .colon[data-pos="c2"] { left: 47.9%; }  /* between hours and minutes */
-  .colon[data-pos="c3"] { left: 74.5%; }  /* between minutes and seconds */
+  .colon[data-pos="c1"] { left: 36.95%; }  /* between days and hours */
+  .colon[data-pos="c2"] { left: 50.80%; }  /* between hours and minutes */
+  .colon[data-pos="c3"] { left: 64.42%; }  /* between minutes and seconds */
 
   .colon .dot {
-    width: 22%;
+    width: 65%;
     aspect-ratio: 1;
     border-radius: 50%;
     background: #ff1a1a;
@@ -136,39 +130,29 @@
 <body>
 
 <div class="stage">
-  <div class="device"></div>
+  <img class="device" src="countdown_device.png" alt="">
 
-  <div class="display">
-    <div class="digit-wrap" data-position="d0"><svg class="digit" viewBox="0 0 60 100" preserveAspectRatio="xMidYMid meet"></svg></div>
-    <div class="digit-wrap" data-position="d1"><svg class="digit" viewBox="0 0 60 100" preserveAspectRatio="xMidYMid meet"></svg></div>
+  <div class="digit-wrap" data-position="d0"><svg class="digit" viewBox="0 0 60 100" preserveAspectRatio="none"></svg></div>
+  <div class="digit-wrap" data-position="d1"><svg class="digit" viewBox="0 0 60 100" preserveAspectRatio="none"></svg></div>
 
-    <div class="colon" data-pos="c1"><span class="dot"></span><span class="dot"></span></div>
+  <div class="colon" data-pos="c1"><span class="dot"></span><span class="dot"></span></div>
 
-    <div class="digit-wrap" data-position="h0"><svg class="digit" viewBox="0 0 60 100" preserveAspectRatio="xMidYMid meet"></svg></div>
-    <div class="digit-wrap" data-position="h1"><svg class="digit" viewBox="0 0 60 100" preserveAspectRatio="xMidYMid meet"></svg></div>
+  <div class="digit-wrap" data-position="h0"><svg class="digit" viewBox="0 0 60 100" preserveAspectRatio="none"></svg></div>
+  <div class="digit-wrap" data-position="h1"><svg class="digit" viewBox="0 0 60 100" preserveAspectRatio="none"></svg></div>
 
-    <div class="colon" data-pos="c2"><span class="dot"></span><span class="dot"></span></div>
+  <div class="colon" data-pos="c2"><span class="dot"></span><span class="dot"></span></div>
 
-    <div class="digit-wrap" data-position="m0"><svg class="digit" viewBox="0 0 60 100" preserveAspectRatio="xMidYMid meet"></svg></div>
-    <div class="digit-wrap" data-position="m1"><svg class="digit" viewBox="0 0 60 100" preserveAspectRatio="xMidYMid meet"></svg></div>
+  <div class="digit-wrap" data-position="m0"><svg class="digit" viewBox="0 0 60 100" preserveAspectRatio="none"></svg></div>
+  <div class="digit-wrap" data-position="m1"><svg class="digit" viewBox="0 0 60 100" preserveAspectRatio="none"></svg></div>
 
-    <div class="colon" data-pos="c3"><span class="dot"></span><span class="dot"></span></div>
+  <div class="colon" data-pos="c3"><span class="dot"></span><span class="dot"></span></div>
 
-    <div class="digit-wrap" data-position="s0"><svg class="digit" viewBox="0 0 60 100" preserveAspectRatio="xMidYMid meet"></svg></div>
-    <div class="digit-wrap" data-position="s1"><svg class="digit" viewBox="0 0 60 100" preserveAspectRatio="xMidYMid meet"></svg></div>
-  </div>
+  <div class="digit-wrap" data-position="s0"><svg class="digit" viewBox="0 0 60 100" preserveAspectRatio="none"></svg></div>
+  <div class="digit-wrap" data-position="s1"><svg class="digit" viewBox="0 0 60 100" preserveAspectRatio="none"></svg></div>
 </div>
 
 <script>
 (function () {
-  // Seven-segment paths inside a 60 x 100 viewBox.
-  //
-  //   aaaaa
-  //  f     b
-  //   ggggg
-  //  e     c
-  //   ddddd
-
   var W = 60, H = 100;
   var pad = 5;
   var thick = 8;
@@ -258,8 +242,8 @@
     return ('0' + n).slice(-2);
   }
 
-  // Target: 30 June 2026 at 23:59 local time (end of EOFY day).
-  var target = new Date(2026, 5, 30, 23, 59, 0, 0); // month index 5 = June
+  // Target: 30 June 2026 at 23:59 local time (end of EOFY day)
+  var target = new Date(2026, 5, 30, 23, 59, 0, 0);
 
   function getSvg(pos) {
     return document.querySelector('.digit-wrap[data-position="' + pos + '"] svg.digit');
